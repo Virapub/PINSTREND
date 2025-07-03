@@ -23,5 +23,5 @@ At PINSTREND, we're passionate about discovering and sharing the hottest trendin
 PINSTREND participates in the Amazon Associates Program. When you buy through our links, we may earn a small commission at no extra cost to you. This helps support our research and content creation.  
 
 *"We don't recommend anything we wouldn't buy ourselves."*  
-https://virapub.github.io/PINSTREND/
+https://virapub.github.io/PINSTREND/src/templates/index.html
 
