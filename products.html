@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | ShopEase</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation (same as index.html) -->
+    <nav class="navbar">
+        <!-- Copy from index.html -->
+    </nav>
 
+    <!-- Product Listing Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="products-header">
+                <h1>All Products</h1>
+                <div class="product-filters">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="Appliances">Appliances</option>
+                        <option value="Smart Gadgets">Smart Gadgets</option>
+                        <option value="Storage">Storage</option>
+                        <!-- Add other categories -->
+                    </select>
+                    <select id="sortBy">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="product-grid" id="allProducts">
+                <!-- Products will be loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="footer">
+        <!-- Copy from index.html -->
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>
