@@ -1,41 +1,34 @@
 // Sample product data
 const products = [
     {
-        id: 1,
-        title: "Wireless Bluetooth Headphones",
-        price: 99.99,
-        originalPrice: 129.99,
-        image: "images/headphones.jpg",
-        rating: 4.5,
-        category: "Electronics"
-    },
-    {
-        id: 2,
-        title: "Smart Watch Fitness Tracker",
-        price: 79.99,
-        originalPrice: 99.99,
-        image: "images/smartwatch.jpg",
-        rating: 4.2,
-        category: "Electronics"
-    },
-    {
-        id: 3,
-        title: "Cotton T-Shirt",
-        price: 24.99,
-        originalPrice: 29.99,
-        image: "images/tshirt.jpg",
-        rating: 4.0,
-        category: "Fashion"
-    },
-    {
-        id: 4,
-        title: "Stainless Steel Water Bottle",
-        price: 19.99,
+        id: "collapsible-electric-kettle",
+        title: "Collapsible Electric Kettle",
+        description: "Space-saving collapsible kettle with auto shut-off and boil-dry protection",
+        price: 17.51,
         originalPrice: 24.99,
-        image: "images/waterbottle.jpg",
-        rating: 4.7,
-        category: "Home"
+        priceINR: 1499,
+        image: "https://m.media-amazon.com/images/I/61WQVNM0LCL._SL1500_.jpg",
+        rating: 4.5,
+        category: "Appliances",
+        features: ["Collapsible design", "800W power", "BPA-free materials"],
+        link: "https://amzn.to/448SSZx",
+        page: "products.html#collapsible-electric-kettle"
+    },
+    {
+        id: "automatic-soap-dispenser",
+        title: "Automatic Soap Dispenser",
+        description: "Touchless soap dispenser with infrared sensor for hygienic use",
+        price: 16.21,
+        originalPrice: 22.99,
+        priceINR: 1388,
+        image: "https://m.media-amazon.com/images/I/61Vqx4KEHuL._SL1024_.jpg",
+        rating: 4.2,
+        category: "Smart Gadgets",
+        features: ["Touchless operation", "Battery powered", "Adjustable soap volume"],
+        link: "https://amzn.to/46sLIRc",
+        page: "products.html#automatic-soap-dispenser"
     }
+    
 ];
 
 // Display featured products
