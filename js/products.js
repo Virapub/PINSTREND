@@ -114,6 +114,23 @@ export function getProductById(productId) {
     return products.find(p => p.id === productId);
 }
 
+export function displayCategories(containerId = 'categoryGrid') {
+    const categoryContainer = document.getElementById(containerId);
+    if (!categoryContainer) return;
+
+    const categories = [...new Set(products.map(p => p.category))]; // Unique categories
+    categoryContainer.innerHTML = '';
+
+    categories.forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        categoryCard.innerHTML = `
+            <h3>${category}</h3>
+            <a href="products.html?category=${category}" class="btn">Shop Now</a>
+        `;
+        categoryContainer.appendChild(categoryCard);
+    });
+}
 // Initialize products on page load
 document.addEventListener('DOMContentLoaded', () => {
     displayFeaturedProducts();
