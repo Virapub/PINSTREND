@@ -89,79 +89,16 @@
         </div>
     </footer>
 
-    <script type="module">
-        import pintrendData from './data.js';
+<script type="module">
+    import { displayFeaturedProducts, updateCartCount } from './js/products.js';
+    import { setupSearch, setupHamburger } from './js/main.js';
 
-        // Toggle hamburger menu
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Load categories dynamically
-        function loadCategories() {
-            const categoryGrid = document.getElementById('categoryGrid');
-            pintrendData.getCategories().forEach(category => {
-                const categoryCard = document.createElement('div');
-                categoryCard.className = 'category-card';
-                categoryCard.innerHTML = `
-                    <img src="images/${category.toLowerCase()}.jpg" alt="${category}" class="category-img">
-                    <h3>${category}</h3>
-                    <a href="products.html?category=${category}" class="btn category-btn">Shop Now</a>
-                `;
-                categoryGrid.appendChild(categoryCard);
-            });
-        }
-
-        // Load featured products
-        function loadFeaturedProducts() {
-            const featuredProducts = document.getElementById('featuredProducts');
-            featuredProducts.innerHTML = '';
-            const allProducts = Object.values(pintrendData.categories).flat();
-            const featured = allProducts.sort(() => 0.5 - Math.random()).slice(0, 4); // Random 4 products
-
-            featured.forEach(product => {
-                if (product.stock > 0) {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy">
-                        <div class="product-details">
-                            <h3>${product.name}</h3>
-                            <p class="price">INR ${product.price.inr} / USD ${product.price.usd}</p>
-                            <p class="rating">⭐ ${product.rating} (${product.reviews} reviews)</p>
-                            <a href="product-detail.html?id=${product.id}" class="view-details">View Details</a>
-                            <button class="add-to-cart" data-product-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
-                                ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-                            </button>
-                        </div>
-                    `;
-                    featuredProducts.appendChild(productCard);
-                }
-            });
-
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                if (!button.disabled) {
-                    button.addEventListener('click', () => {
-                        pintrendData.addToCart(button.dataset.productId);
-                        loadFeaturedProducts();
-                        updateCartCount();
-                        alert(`${pintrendData.getProductById(button.dataset.productId).name} added to cart!`);
-                    });
-                }
-            });
-        }
-
-        // Update cart count
-        function updateCartCount() {
-            document.getElementById('cart-count').textContent = pintrendData.getCartItems().length;
-        }
-
-        // Initial load
-        loadCategories();
-        loadFeaturedProducts();
+    document.addEventListener('DOMContentLoaded', () => {
+        displayFeaturedProducts();
         updateCartCount();
-    </script>
+        setupSearch();
+        setupHamburger();
+    });
+</script>
 </body>
 </html>
