@@ -1,1 +1,177 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="View and manage your cart at PINSTREND. Shop Summer Collection 2025 with ease!">
+    <title>Cart | PINSTREND - Summer Collection 2025</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">PINSTREND</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="#">Categories</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="nav-icons">
+                <a href="#" class="search-icon"><i class="fas fa-search"></i></a>
+                <a href="#" class="user-icon"><i class="fas fa-user"></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+            <button class="hamburger"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <section class="cart-section">
+        <div class="container">
+            <h1>Your Cart</h1>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be loaded via JavaScript -->
+            </div>
+            <div class="cart-summary" id="cartSummary">
+                <p>Total Items: <span id="totalItems">0</span></p>
+                <p>Total Price: INR <span id="totalPrice">0</span> / USD $<span id="totalPriceUSD">0.00</span></p>
+                <button class="btn checkout-btn" id="checkoutBtn" disabled>Proceed to Checkout</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>PINSTREND</h3>
+                    <p>Premium e-commerce solution for all your needs.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <p>Email: info@pintrend.com</p>
+                    <p>Phone: +1 (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 PINSTREND. All rights reserved. | Last Updated: July 04, 2025, 08:52 AM IST</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { getProductById, addToCart, updateCartCount, cart } from './js/products.js';
+        import { setupSearch, setupHamburger } from './js/main.js';
+
+        function loadCart() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty!</p>';
+                document.getElementById('cartSummary').style.display = 'none';
+                return;
+            }
+
+            cart.forEach(item => {
+                const product = getProductById(item.id);
+                if (product) {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${product.image}" alt="${product.title}" class="cart-item-img" loading="lazy">
+                        <div class="cart-item-details">
+                            <h3>${product.title}</h3>
+                            <p class="price">INR ${product.priceINR} / USD $${product.price.toFixed(2)}</p>
+                            <p>Quantity: <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="${product.stock + item.quantity}"></p>
+                            <button class="remove-btn" data-product-id="${item.id}">Remove</button>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                }
+            });
+
+            updateCartSummary();
+            addEventListeners();
+        }
+
+        function updateCartSummary() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPriceINR = cart.reduce((sum, item) => sum + item.quantity * (getProductById(item.id)?.priceINR || 0), 0);
+            const totalPriceUSD = cart.reduce((sum, item) => sum + item.quantity * (getProductById(item.id)?.price || 0), 0).toFixed(2);
+
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalPrice').textContent = totalPriceINR;
+            document.getElementById('totalPriceUSD').textContent = totalPriceUSD;
+            document.getElementById('checkoutBtn').disabled = totalItems === 0;
+            document.getElementById('cartSummary').style.display = totalItems > 0 ? 'block' : 'none';
+        }
+
+        function addEventListeners() {
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.dataset.productId;
+                    const product = getProductById(productId);
+                    const cartItem = cart.find(item => item.id === productId);
+                    if (product && cartItem) {
+                        product.stock += cartItem.quantity;
+                        cart = cart.filter(item => item.id !== productId);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        loadCart();
+                        updateCartCount();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const productId = e.target.closest('.cart-item').querySelector('.remove-btn').dataset.productId;
+                    const product = getProductById(productId);
+                    const cartItem = cart.find(item => item.id === productId);
+                    const newQuantity = parseInt(e.target.value);
+
+                    if (product && cartItem && newQuantity >= 1 && newQuantity <= (product.stock + cartItem.quantity)) {
+                        const diff = newQuantity - cartItem.quantity;
+                        cartItem.quantity = newQuantity;
+                        product.stock -= diff;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        loadCart();
+                        updateCartCount();
+                    } else {
+                        e.target.value = cartItem.quantity; // Revert if invalid
+                    }
+                });
+            });
+        }
+
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            if (cart.length > 0) {
+                alert('Proceeding to checkout! (This is a demo feature)');
+                // Add real checkout logic here in the future
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            updateCartCount();
+            setupSearch();
+            setupHamburger();
+        });
+    </script>
+</body>
+</html>
