@@ -90,11 +90,51 @@
     </footer>
 
 <script type="module">
-    import { displayFeaturedProducts, updateCartCount } from './js/products.js';
+    import { getProductById, addToCart, updateCartCount } from './js/products.js';
     import { setupSearch, setupHamburger } from './js/main.js';
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    function loadProductDetail() {
+        const productDetail = document.getElementById('productDetail');
+        const product = getProductById(productId);
+
+        if (product) {
+            productDetail.innerHTML = `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.title}" class="product-img" loading="lazy">
+                    <div class="product-details">
+                        <h2>${product.title}</h2>
+                        <p class="price">INR ${product.priceINR} / USD $${product.price.toFixed(2)}</p>
+                        <p class="original-price">Original: $${product.originalPrice.toFixed(2)}</p>
+                        <p class="rating">⭐ ${product.rating} (N/A reviews)</p>
+                        <p class="description">${product.description}</p>
+                        <p class="stock">Stock: ${product.stock} available</p>
+                        <button class="add-to-cart" data-product-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
+                            ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            productDetail.innerHTML = '<p>Product not found!</p>';
+        }
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            if (!button.disabled) {
+                button.addEventListener('click', () => {
+                    addToCart(productId);
+                    loadProductDetail();
+                    updateCartCount();
+                    alert(`${product.title} added to cart!`);
+                });
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        displayFeaturedProducts();
+        loadProductDetail();
         updateCartCount();
         setupSearch();
         setupHamburger();
