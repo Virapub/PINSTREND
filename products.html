@@ -1,157 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>All Products | PINSTREND</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KitchenLink - Smart Gadgets Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">
-            <h2>PINSTREND</h2>
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html" class="active">Products</a></li>
-            <li><a href="cart.html">Cart <span id="cart-count">0</span></a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="nav-icons">
-            <a href="#" class="search-icon"><i class="fas fa-search"></i></a>
-            <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+    <nav role="navigation">
+        <div class="nav-container">
+            <div class="logo" aria-label="KitchenLink Logo">KitchenLink</div>
+            <button class="hamburger" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+            <div class="links">
+                <a href="index.html">Home</a>
+                <a href="products.html" class="active">Products</a>
+                <div class="dropdown">
+                    <button class="dropbtn">Meal Plans <i class="fas fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="meal-prep.html">Budget Plan</a>
+                        <a href="office-meal-plan.html">Office Plan</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Product Listing Section -->
-    <section class="products-section">
-        <div class="container">
-            <div class="products-header">
-                <h1>All Products</h1>
-                <div class="product-filters">
-                    <select id="categoryFilter">
-                        <option value="">All Categories</option>
-                        <!-- Dynamic categories will be loaded by JS -->
-                    </select>
-                    <select id="sortBy">
-                        <option value="featured">Featured</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="rating">Highest Rated</option>
-                    </select>
-                    <button id="filterBtn" class="filter-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+    <header role="banner">
+        <h1>KitchenLink – Smart Kitchen Gadgets</h1>
+        <p>Your one-stop shop for smart & affordable tools</p>
+    </header>
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Search gadgets or meals..." aria-label="Search kitchen gadgets or meal plans">
+    </div>
+
+    <div class="search-results" id="searchResults"></div>
+
+    <main class="products" id="productList" role="region" aria-label="Product list"> 
+        <!-- Product listings will be generated from data.js -->
+    </main>
+
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>KitchenLink</h3>
+                <p>Your partner for healthy, efficient meal planning that fits your busy lifestyle.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
                 </div>
             </div>
-            
-            <div class="product-grid" id="allProducts">
-                <!-- Products will be loaded via JavaScript -->
+            <div class="footer-column">
+                <h3>Meal Plans</h3>
+                <ul class="footer-links">
+                    <li><a href="office-meal-plan.html"><i class="fas fa-chevron-right"></i> Office Meal Plans</a></li>
+                    <li><a href="meal-prep.html"><i class="fas fa-chevron-right"></i> Budget Plans</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Vegetarian Plans</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> High-Protein Plans</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Meal Prep Guides</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Recipe Collections</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Grocery Shopping Tips</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Healthy Eating Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto: virapublishers@gmail.com"><i class="fas fa-envelope"></i> kitchenlink@query.com</a></li>
+                </ul>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 PINSTREND. All rights reserved.</p>
-            <p>Contact Us: info@pintrend.com | Phone: +1 (123) 456-7890</p>
-            <div class="footer-links">
-                <a href="index.html">Home</a> | 
-                <a href="products.html">Products</a> | 
-                <a href="#about">About Us</a> | 
-                <a href="#contact">Contact</a>
-            </div>
+        <div class="copyright">
+            © 2025 KitchenLink | Eat Well. Live Smart.
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script type="module">
-    import { displayFeaturedProducts, updateCartCount, getProductById, addToCart } from './js/products.js';
-    import { setupSearch, setupHamburger } from './js/main.js';
+    <script src="data.js"></script>
+    <script>
+        // DOM Elements
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.links');
+        const dropdown = document.querySelector('.dropdown');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const productList = document.getElementById('productList');
 
-    function loadCategories() {
-        const categoryFilter = document.getElementById('categoryFilter');
-        const categories = [...new Set(products.map(p => p.category))];
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
-    }
-
-    function loadProducts(category = '', sortBy = 'featured') {
-        const productGrid = document.getElementById('allProducts');
-        productGrid.innerHTML = '';
-
-        let filteredProducts = products;
-        if (category) {
-            filteredProducts = products.filter(p => p.category === category);
-        }
-
-        if (sortBy === 'price-low') {
-            filteredProducts.sort((a, b) => a.price - b.price);
-        } else if (sortBy === 'price-high') {
-            filteredProducts.sort((a, b) => b.price - a.price);
-        } else if (sortBy === 'rating') {
-            filteredProducts.sort((a, b) => b.rating - a.rating);
-        }
-
-        filteredProducts.forEach(product => {
-            if (product.stock > 0) {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.title}" class="product-img" loading="lazy">
-                    <div class="product-details">
-                        <h3>${product.title}</h3>
-                        <p class="price">INR ${product.priceINR} / USD $${product.price.toFixed(2)}</p>
-                        <p class="original-price">Original: $${product.originalPrice.toFixed(2)}</p>
-                        <p class="rating">⭐ ${product.rating} (N/A reviews)</p>
-                        <a href="product-detail.html?id=${product.id}" class="view-details">View Details</a>
-                        <button class="add-to-cart" data-product-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
-                            ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-                        </button>
+        // Generate product listings
+        function generateProductListings() {
+            let html = '';
+            data.products.forEach(product => {
+                html += `
+                    <div class="product" id="${product.id}" data-name="${product.name}">
+                        <div class="image-container">
+                            <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        </div>
+                        <div class="product-content">
+                            <div class="title">${product.name}</div>
+                            <div class="price">₹${product.priceINR} / $${product.priceUSD}</div>
+                            <a href="${product.link}" class="buy" target="_blank" rel="noopener">Buy Now</a>
+                        </div>
                     </div>
                 `;
-                productGrid.appendChild(productCard);
+            });
+            productList.innerHTML = html;
+        }
+
+        // Initialize product listings
+        generateProductListings();
+
+        // Navigation Menu Toggle
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Dropdown Menu Toggle
+        dropdown.querySelector('.dropbtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdownContent.classList.toggle('show');
+        });
+
+        // Close Dropdown When Clicking Outside
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdownContent.classList.remove('show');
             }
         });
 
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            if (!button.disabled) {
-                button.addEventListener('click', () => {
-                    addToCart(button.dataset.productId);
-                    loadProducts(category, sortBy);
-                    updateCartCount();
-                    const product = getProductById(button.dataset.productId);
-                    alert(`${product.title} added to cart!`);
+        // Debounce Function
+        function debounce(func, timeout = 300) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => { func.apply(this, args); }, timeout);
+            };
+        }
+
+        // Highlight Matches in Search Results
+        function highlightMatches(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(query, 'gi');
+            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+
+        // Perform Search
+        const performSearch = debounce(() => {
+            const query = searchInput.value.toLowerCase().trim();
+            searchResults.innerHTML = '';
+            
+            if (!query) {
+                searchResults.style.display = 'none';
+                productList.style.display = 'grid';
+                return;
+            }
+
+            searchResults.style.display = 'block';
+            productList.style.display = 'none';
+
+            // Search products
+            const productResults = data.products.filter(product => 
+                product.name.toLowerCase().includes(query) || 
+                product.description.toLowerCase().includes(query)
+            );
+
+            // Search meal plans
+            const officeMealResults = data.mealPlans.office.filter(meal => 
+                meal.name.toLowerCase().includes(query) || 
+                meal.day.toLowerCase().includes(query)
+            );
+            
+            const budgetMealResults = data.mealPlans.budget.filter(meal => 
+                meal.name.toLowerCase().includes(query) || 
+                meal.day.toLowerCase().includes(query)
+            );
+
+            if (productResults.length + officeMealResults.length + budgetMealResults.length === 0) {
+                searchResults.innerHTML = '<p class="no-results">No results found for "' + query + '"</p>';
+                return;
+            }
+
+            let resultsHTML = '<div class="search-results-header">';
+            resultsHTML += `<h3>Search Results for "${query}"</h3>`;
+            resultsHTML += '<div class="search-filters">';
+            resultsHTML += '<button class="filter-btn active" data-filter="all">All</button>';
+            resultsHTML += '<button class="filter-btn" data-filter="products">Products</button>';
+            resultsHTML += '<button class="filter-btn" data-filter="meals">Meal Plans</button>';
+            resultsHTML += '</div></div>';
+
+            resultsHTML += '<div class="results-container">';
+
+            if (productResults.length > 0) {
+                resultsHTML += '<div class="result-section" data-type="products">';
+                resultsHTML += '<h4>Products (' + productResults.length + ')</h4>';
+                
+                productResults.forEach(product => {
+                    resultsHTML += `
+                        <div class="search-result">
+                            <a href="${product.page || product.link}">
+                                <div class="result-image">
+                                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                                </div>
+                                <div class="result-content">
+                                    <div class="result-title">${highlightMatches(product.name, query)}</div>
+                                    <div class="result-description">${highlightMatches(product.description, query)}</div>
+                                    <div class="result-type">Product - ₹${product.priceINR} / $${product.priceUSD}</div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
                 });
+                resultsHTML += '</div>';
             }
+
+            if (officeMealResults.length > 0 || budgetMealResults.length > 0) {
+                resultsHTML += '<div class="result-section" data-type="meals">';
+                resultsHTML += '<h4>Meal Plans (' + (officeMealResults.length + budgetMealResults.length) + ')</h4>';
+                
+                officeMealResults.forEach(meal => {
+                    resultsHTML += `
+                        <div class="search-result">
+                            <a href="${meal.page}">
+                                <div class="result-content">
+                                    <div class="result-title">${highlightMatches(meal.day, query)} - Office Plan</div>
+                                    <div class="result-description">${highlightMatches(meal.name, query)}</div>
+                                    <div class="result-type">Meal Plan - ${meal.prepTime} prep</div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                });
+
+                budgetMealResults.forEach(meal => {
+                    resultsHTML += `
+                        <div class="search-result">
+                            <a href="${meal.page}">
+                                <div class="result-content">
+                                    <div class="result-title">${highlightMatches(meal.day, query)} - Budget Plan</div>
+                                    <div class="result-description">${highlightMatches(meal.name, query)}</div>
+                                    <div class="result-type">Meal Plan - ${meal.prepTime} prep</div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                });
+                resultsHTML += '</div>';
+            }
+
+            resultsHTML += '</div>'; // Close results-container
+            searchResults.innerHTML = resultsHTML;
+
+            // Add filter button functionality
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.dataset.filter;
+                    document.querySelectorAll('.result-section').forEach(section => {
+                        if (filter === 'all') {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = section.dataset.type === filter ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
         });
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        displayFeaturedProducts('allProducts'); // Use allProducts div for product listing
-        updateCartCount();
-        setupSearch();
-        setupHamburger();
-        loadCategories();
-        loadProducts();
-    });
-
-    document.getElementById('categoryFilter').addEventListener('change', (e) => {
-        loadProducts(e.target.value, document.getElementById('sortBy').value);
-    });
-
-    document.getElementById('sortBy').addEventListener('change', (e) => {
-        loadProducts(document.getElementById('categoryFilter').value, e.target.value);
-    });
-
-    document.getElementById('filterBtn').addEventListener('click', () => {
-        loadProducts(document.getElementById('categoryFilter').value, document.getElementById('sortBy').value);
-    });
-</script>
+        // Initialize search
+        searchInput.addEventListener('input', performSearch);
+    </script>
 </body>
 </html>
