@@ -373,7 +373,7 @@ body {
     font-size: 0.9em;
 }
 
-/* ========== Search Styles ========== */
+/* ========== Search Box ========== */
 .search-input {
     padding: 5px;
     margin-left: 10px;
@@ -409,6 +409,110 @@ body {
     margin-right: 10px;
 }
 
+/* ========== Homepage Features Section ========== */
+.home-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    padding: 40px 20px;
+    background: #ffffff;
+}
+
+.feature-box {
+    flex: 1 1 250px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    background: #f1f1f1;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+/* ========== Testimonials Section ========== */
+.testimonials {
+    padding: 40px 20px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.testimonials h2 {
+    margin-bottom: 20px;
+}
+
+.testimonial {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    font-style: italic;
+    color: #555;
+}
+
+.testimonial-author {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* ========== CTA Section ========== */
+.cta-section {
+    background: #007bff;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.cta-section h2 {
+    margin-bottom: 10px;
+}
+
+.cta-section p {
+    margin-bottom: 20px;
+}
+
+.cta-section .btn {
+    background: #ffca2c;
+    color: #333;
+}
+
+.cta-section .btn:hover {
+    background: #e0b100;
+}
+
+/* ========== Newsletter Section ========== */
+.newsletter {
+    background: #f8f9fa;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.newsletter h2 {
+    margin-bottom: 10px;
+}
+
+.newsletter input[type="email"] {
+    padding: 10px;
+    width: 300px;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.newsletter .btn {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 /* ========== Responsive Styles ========== */
 @media (max-width: 768px) {
     .nav-links {
@@ -440,7 +544,14 @@ body {
     }
 
     .category-grid, .product-grid,
-    .footer-grid {
+    .footer-grid, .home-features {
         grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .newsletter input[type="email"],
+    .newsletter .btn {
+        width: 100%;
+        margin: 5px 0;
     }
 }
