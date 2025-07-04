@@ -1,134 +1,90 @@
-// data.js
-// Yeh file PINSTREND website ke liye products aur categories ka data store karta hai
+// main.js
+// Central JavaScript file for PINSTREND website functionality
 
-const pintrendData = {
-    categories: {
-        "Trending Electronics": [
-            {
-                id: "TE001",
-                name: "Smart Wireless Earbuds",
-                image: "images/wireless-earbuds.jpg",
-                price: { inr: "₹4,999", usd: "$59.99" },
-                description: "Noise-canceling with 24-hour battery life",
-                link: "product-detail.html?id=TE001",
-                category: "Trending Electronics",
-                tags: ["earbuds", "wireless", "noise-canceling", "electronics"],
-                rating: 4.5,
-                reviews: 1200
-            },
-            {
-                id: "TE002",
-                name: "Portable Smart Speaker",
-                image: "images/smart-speaker.jpg",
-                price: { inr: "₹3,499", usd: "$41.99" },
-                description: "Water-resistant with voice assistant",
-                link: "product-detail.html?id=TE002",
-                category: "Trending Electronics",
-                tags: ["speaker", "smart", "portable", "electronics"],
-                rating: 4.2,
-                reviews: 850
-            }
-        ],
-        "Home Essentials": [
-            {
-                id: "HE001",
-                name: "Smart LED Bulb",
-                image: "images/led-bulb.jpg",
-                price: { inr: "₹1,299", usd: "$15.59" },
-                description: "Color-changing with app control",
-                link: "product-detail.html?id=HE001",
-                category: "Home Essentials",
-                tags: ["bulb", "led", "smart", "home"],
-                rating: 4.7,
-                reviews: 600
-            },
-            {
-                id: "HE002",
-                name: "Automatic Vacuum Cleaner",
-                image: "images/vacuum-cleaner.jpg",
-                price: { inr: "₹12,999", usd: "$155.99" },
-                description: "Robotic cleaning with scheduling",
-                link: "product-detail.html?id=HE002",
-                category: "Home Essentials",
-                tags: ["vacuum", "cleaner", "robotic", "home"],
-                rating: 4.3,
-                reviews: 450
-            }
-        ],
-        "Fashion Trends": [
-            {
-                id: "FT001",
-                name: "Wireless Running Shoes",
-                image: "images/running-shoes.jpg",
-                price: { inr: "₹5,499", usd: "$65.99" },
-                description: "Lightweight with LED lights",
-                link: "product-detail.html?id=FT001",
-                category: "Fashion Trends",
-                tags: ["shoes", "running", "wireless", "fashion"],
-                rating: 4.6,
-                reviews: 300
-            }
-        ]
-    },
+import pintrendData from './data.js';
 
-    // Search function for products
-    searchProducts: function(searchTerm) {
-        const results = [];
-        searchTerm = searchTerm.toLowerCase();
+// Global cart update function
+export function updateCartCount() {
+    const cartCountElements = document.querySelectorAll('#cart-count');
+    cartCountElements.forEach(element => {
+        element.textContent = pintrendData.getCartItems().length;
+    });
+}
 
-        Object.values(this.categories).forEach(products => {
-            products.forEach(product => {
-                if (product.name.toLowerCase().includes(searchTerm) || 
-                    product.tags.some(tag => tag.toLowerCase().includes(searchTerm))) {
-                    results.push(product);
-                }
-            });
-        });
+// Search functionality
+export function setupSearch() {
+    const searchIcon = document.querySelector('.search-icon');
+    const searchInput = document.createElement('input');
+    searchInput.className = 'search-input';
+    searchInput.placeholder = 'Search products...';
 
-        return results;
-    },
-
-    // Get product by ID
-    getProductById: function(productId) {
-        let foundProduct = null;
-        Object.values(this.categories).forEach(products => {
-            const product = products.find(p => p.id === productId);
-            if (product) foundProduct = product;
-        });
-        return foundProduct;
-    },
-
-    // Get all category names
-    getCategories: function() {
-        return Object.keys(this.categories);
-    },
-
-    // Get products by category
-    getProductsByCategory: function(category) {
-        return this.categories[category] || [];
-    },
-
-    // Cart data (initially empty, can be updated dynamically)
-    cart: [],
-
-    // Add to cart function
-    addToCart: function(productId) {
-        const product = this.getProductById(productId);
-        if (product) {
-            this.cart.push({ ...product, quantity: 1 });
+    searchIcon.addEventListener('click', () => {
+        if (!document.querySelector('.search-input')) {
+            searchIcon.parentElement.appendChild(searchInput);
+            searchInput.focus();
+        } else {
+            searchInput.remove();
         }
-    },
+    });
 
-    // Get cart items
-    getCartItems: function() {
-        return this.cart;
-    },
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const resultsContainer = document.createElement('div');
+        resultsContainer.className = 'search-results';
 
-    // Remove from cart
-    removeFromCart: function(productId) {
-        this.cart = this.cart.filter(item => item.id !== productId);
+        if (searchTerm.length > 2) {
+            const results = pintrendData.searchProducts(searchTerm);
+            resultsContainer.innerHTML = results.map(product => `
+                <a href="${product.link}" class="search-result">
+                    <img src="${product.image}" alt="${product.name}" class="search-result-img">
+                    <div class="search-result-info">
+                        <h4>${product.name}</h4>
+                        <p>${product.price.inr} • ${product.category}</p>
+                    </div>
+                </a>
+            `).join('');
+            document.body.appendChild(resultsContainer);
+        } else if (document.querySelector('.search-results')) {
+            document.querySelector('.search-results').remove();
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!searchIcon.contains(event.target) && !searchInput.contains(event.target)) {
+                searchInput.remove();
+                if (document.querySelector('.search-results')) {
+                    document.querySelector('.search-results').remove();
+                }
+            }
+        });
+    });
+}
+
+// Hamburger menu toggle
+export function setupHamburger() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
     }
-};
+}
 
-// Export data for use in other files
-export default pintrendData;
+// Initialize main functionality
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartCount();
+    setupSearch();
+    setupHamburger();
+
+    // Add event listeners for Add to Cart buttons globally
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        if (!button.disabled) {
+            button.addEventListener('click', () => {
+                pintrendData.addToCart(button.dataset.productId);
+                updateCartCount();
+                const product = pintrendData.getProductById(button.dataset.productId);
+                alert(`${product.name} added to cart!`);
+            });
+        }
+    });
+});
