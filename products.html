@@ -280,4 +280,12 @@
         searchInput.addEventListener('input', performSearch);
     </script>
 </body>
+    <script type="module">
+    import { displayFeaturedProducts, updateCartCount, getProductById, addToCart, cart } from './js/products.js';
+    import { setupSearch, setupHamburger } from './js/main.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      Listener('input', performSearch);
+    </script>
+</body>
 </html>
