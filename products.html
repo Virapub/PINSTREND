@@ -83,209 +83,56 @@
         </div>
     </footer>
 
-    <script src="main.js"></script>
-    <script>
-        // DOM Elements
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.links');
-        const dropdown = document.querySelector('.dropdown');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
-        const productList = document.getElementById('productList');
-
-        // Generate product listings
-        function generateProductListings() {
-            let html = '';
-            data.products.forEach(product => {
-                html += `
-                    <div class="product" id="${product.id}" data-name="${product.name}">
-                        <div class="image-container">
-                            <img src="${product.image}" alt="${product.name}" loading="lazy">
-                        </div>
-                        <div class="product-content">
-                            <div class="title">${product.name}</div>
-                            <div class="price">₹${product.priceINR} / $${product.priceUSD}</div>
-                            <a href="${product.link}" class="buy" target="_blank" rel="noopener">Buy Now</a>
-                        </div>
-                    </div>
-                `;
-            });
-            productList.innerHTML = html;
-        }
-
-        // Initialize product listings
-        generateProductListings();
-
-        // Navigation Menu Toggle
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            hamburger.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
-
-        // Dropdown Menu Toggle
-        dropdown.querySelector('.dropbtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            dropdownContent.classList.toggle('show');
-        });
-
-        // Close Dropdown When Clicking Outside
-        document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdownContent.classList.remove('show');
-            }
-        });
-
-        // Debounce Function
-        function debounce(func, timeout = 300) {
-            let timer;
-            return (...args) => {
-                clearTimeout(timer);
-                timer = setTimeout(() => { func.apply(this, args); }, timeout);
-            };
-        }
-
-        // Highlight Matches in Search Results
-        function highlightMatches(text, query) {
-            if (!query) return text;
-            const regex = new RegExp(query, 'gi');
-            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
-        }
-
-        // Perform Search
-        const performSearch = debounce(() => {
-            const query = searchInput.value.toLowerCase().trim();
-            searchResults.innerHTML = '';
-            
-            if (!query) {
-                searchResults.style.display = 'none';
-                productList.style.display = 'grid';
-                return;
-            }
-
-            searchResults.style.display = 'block';
-            productList.style.display = 'none';
-
-            // Search products
-            const productResults = data.products.filter(product => 
-                product.name.toLowerCase().includes(query) || 
-                product.description.toLowerCase().includes(query)
-            );
-
-            // Search meal plans
-            const officeMealResults = data.mealPlans.office.filter(meal => 
-                meal.name.toLowerCase().includes(query) || 
-                meal.day.toLowerCase().includes(query)
-            );
-            
-            const budgetMealResults = data.mealPlans.budget.filter(meal => 
-                meal.name.toLowerCase().includes(query) || 
-                meal.day.toLowerCase().includes(query)
-            );
-
-            if (productResults.length + officeMealResults.length + budgetMealResults.length === 0) {
-                searchResults.innerHTML = '<p class="no-results">No results found for "' + query + '"</p>';
-                return;
-            }
-
-            let resultsHTML = '<div class="search-results-header">';
-            resultsHTML += `<h3>Search Results for "${query}"</h3>`;
-            resultsHTML += '<div class="search-filters">';
-            resultsHTML += '<button class="filter-btn active" data-filter="all">All</button>';
-            resultsHTML += '<button class="filter-btn" data-filter="products">Products</button>';
-            resultsHTML += '<button class="filter-btn" data-filter="meals">Meal Plans</button>';
-            resultsHTML += '</div></div>';
-
-            resultsHTML += '<div class="results-container">';
-
-            if (productResults.length > 0) {
-                resultsHTML += '<div class="result-section" data-type="products">';
-                resultsHTML += '<h4>Products (' + productResults.length + ')</h4>';
-                
-                productResults.forEach(product => {
-                    resultsHTML += `
-                        <div class="search-result">
-                            <a href="${product.page || product.link}">
-                                <div class="result-image">
-                                    <img src="${product.image}" alt="${product.name}" loading="lazy">
-                                </div>
-                                <div class="result-content">
-                                    <div class="result-title">${highlightMatches(product.name, query)}</div>
-                                    <div class="result-description">${highlightMatches(product.description, query)}</div>
-                                    <div class="result-type">Product - ₹${product.priceINR} / $${product.priceUSD}</div>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                });
-                resultsHTML += '</div>';
-            }
-
-            if (officeMealResults.length > 0 || budgetMealResults.length > 0) {
-                resultsHTML += '<div class="result-section" data-type="meals">';
-                resultsHTML += '<h4>Meal Plans (' + (officeMealResults.length + budgetMealResults.length) + ')</h4>';
-                
-                officeMealResults.forEach(meal => {
-                    resultsHTML += `
-                        <div class="search-result">
-                            <a href="${meal.page}">
-                                <div class="result-content">
-                                    <div class="result-title">${highlightMatches(meal.day, query)} - Office Plan</div>
-                                    <div class="result-description">${highlightMatches(meal.name, query)}</div>
-                                    <div class="result-type">Meal Plan - ${meal.prepTime} prep</div>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                });
-
-                budgetMealResults.forEach(meal => {
-                    resultsHTML += `
-                        <div class="search-result">
-                            <a href="${meal.page}">
-                                <div class="result-content">
-                                    <div class="result-title">${highlightMatches(meal.day, query)} - Budget Plan</div>
-                                    <div class="result-description">${highlightMatches(meal.name, query)}</div>
-                                    <div class="result-type">Meal Plan - ${meal.prepTime} prep</div>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                });
-                resultsHTML += '</div>';
-            }
-
-            resultsHTML += '</div>'; // Close results-container
-            searchResults.innerHTML = resultsHTML;
-
-            // Add filter button functionality
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    const filter = btn.dataset.filter;
-                    document.querySelectorAll('.result-section').forEach(section => {
-                        if (filter === 'all') {
-                            section.style.display = 'block';
-                        } else {
-                            section.style.display = section.dataset.type === filter ? 'block' : 'none';
-                        }
-                    });
-                });
-            });
-        });
-
-        // Initialize search
-        searchInput.addEventListener('input', performSearch);
-    </script>
-</body>
     <script type="module">
-    import { displayFeaturedProducts, updateCartCount, getProductById, addToCart, cart } from './js/products.js';
+    import { getProductById, addToCart, updateCartCount } from './js/products.js';
     import { setupSearch, setupHamburger } from './js/main.js';
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    function loadProductDetail() {
+        const productDetail = document.getElementById('productDetail');
+        const product = getProductById(productId);
+
+        if (product) {
+            productDetail.innerHTML = `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.title}" class="product-img" loading="lazy">
+                    <div class="product-details">
+                        <h2>${product.title}</h2>
+                        <p class="price">INR ${product.priceINR} / USD $${product.price.toFixed(2)}</p>
+                        <p class="original-price">Original: $${product.originalPrice.toFixed(2)}</p>
+                        <p class="rating">⭐ ${product.rating} (N/A reviews)</p>
+                        <p class="description">${product.description}</p>
+                        <p class="stock">Stock: ${product.stock} available</p>
+                        <button class="add-to-cart" data-product-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
+                            ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            productDetail.innerHTML = '<p>Product not found!</p>';
+        }
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            if (!button.disabled) {
+                button.addEventListener('click', () => {
+                    addToCart(productId);
+                    loadProductDetail();
+                    updateCartCount();
+                    alert(`${product.title} added to cart!`);
+                });
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      Listener('input', performSearch);
-    </script>
+        loadProductDetail();
+        updateCartCount();
+        setupSearch();
+        setupHamburger();
+    });
+</script>
 </body>
 </html>
