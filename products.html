@@ -2,15 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Products | ShopEase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>All Products | PINSTREND</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation (same as index.html) -->
+    <!-- Navigation -->
     <nav class="navbar">
-        <!-- Copy from index.html -->
+        <div class="logo">
+            <h2>PINSTREND</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html" class="active">Products</a></li>
+            <li><a href="cart.html">Cart <span id="cart-count">0</span></a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-icons">
+            <a href="#" class="search-icon"><i class="fas fa-search"></i></a>
+            <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+        </div>
     </nav>
 
     <!-- Product Listing Section -->
@@ -21,10 +33,7 @@
                 <div class="product-filters">
                     <select id="categoryFilter">
                         <option value="">All Categories</option>
-                        <option value="Appliances">Appliances</option>
-                        <option value="Smart Gadgets">Smart Gadgets</option>
-                        <option value="Storage">Storage</option>
-                        <!-- Add other categories -->
+                        <!-- Dynamic categories will be loaded by JS -->
                     </select>
                     <select id="sortBy">
                         <option value="featured">Featured</option>
@@ -32,6 +41,7 @@
                         <option value="price-high">Price: High to Low</option>
                         <option value="rating">Highest Rated</option>
                     </select>
+                    <button id="filterBtn" class="filter-btn"><i class="fas fa-filter"></i> Apply Filters</button>
                 </div>
             </div>
             
@@ -41,12 +51,100 @@
         </div>
     </section>
 
-    <!-- Footer (same as index.html) -->
+    <!-- Footer -->
     <footer class="footer">
-        <!-- Copy from index.html -->
+        <div class="container">
+            <p>&copy; 2025 PINSTREND. All rights reserved.</p>
+            <p>Contact Us: info@pintrend.com | Phone: +1 (123) 456-7890</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="products.html">Products</a> | 
+                <a href="#about">About Us</a> | 
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script src="js/products.js"></script>
+    <!-- JavaScript -->
+    <script type="module">
+        import pintrendData from './data.js';
+
+        // Load categories dynamically
+        function loadCategories() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const categories = pintrendData.getCategories();
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Load products
+        function loadProducts(category = '', sortBy = 'featured') {
+            const productGrid = document.getElementById('allProducts');
+            productGrid.innerHTML = '';
+
+            let products = category ? pintrendData.getProductsByCategory(category) : 
+                Object.values(pintrendData.categories).flat();
+
+            // Sorting logic
+            if (sortBy === 'price-low') {
+                products.sort((a, b) => parseFloat(a.price.usd.replace('$', '')) - parseFloat(b.price.usd.replace('$', '')));
+            } else if (sortBy === 'price-high') {
+                products.sort((a, b) => parseFloat(b.price.usd.replace('$', '')) - parseFloat(a.price.usd.replace('$', '')));
+            } else if (sortBy === 'rating') {
+                products.sort((a, b) => b.rating - a.rating);
+            }
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                    <div class="product-details">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price.inr} / ${product.price.usd}</p>
+                        <p class="rating">⭐ ${product.rating} (${product.reviews} reviews)</p>
+                        <p class="description">${product.description}</p>
+                        <button class="add-to-cart" data-product-id="${product.id}">Add to Cart</button>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+
+            // Add to cart event
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    pintrendData.addToCart(button.dataset.productId);
+                    updateCartCount();
+                    alert(`${product.name} added to cart!`);
+                });
+            });
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = pintrendData.getCartItems().length;
+        }
+
+        // Event listeners
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            loadProducts(e.target.value, document.getElementById('sortBy').value);
+        });
+
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+            loadProducts(document.getElementById('categoryFilter').value, e.target.value);
+        });
+
+        document.getElementById('filterBtn').addEventListener('click', () => {
+            loadProducts(document.getElementById('categoryFilter').value, document.getElementById('sortBy').value);
+        });
+
+        // Initial load
+        loadCategories();
+        loadProducts();
+    </script>
 </body>
 </html>
